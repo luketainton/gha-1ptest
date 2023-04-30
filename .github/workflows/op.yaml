@@ -16,5 +16,5 @@ jobs:
           chmod +x op
       - name: Test authentication
         env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secret.OP_SERVICE_ACCOUNT_TOKEN }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: ./op user get --me

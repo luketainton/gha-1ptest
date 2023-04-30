@@ -22,3 +22,9 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: ./op item list
+      - name: Get test password
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+        run: echo "TEST_PASSWORD=$(./op item get 'Test' --fields label=password)" >> $GITHUB_ENV
+      - name: Echo test password
+        run: echo $TEST_PASSWORD

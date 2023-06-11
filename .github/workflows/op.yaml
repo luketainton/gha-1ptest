@@ -10,27 +10,23 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       
-#       - name: Configure 1Password Service Account
-#         uses: 1password/load-secrets-action/configure@v1
-#         with:
-#           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      - name: Configure 1Password Service Account
+        uses: 1password/load-secrets-action/configure@v1
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
-#       - name: Load secret
-#         uses: 1password/load-secrets-action@v1
-#         env:
-#           SECRET: "op://Test/Test/password"
-      
-      - name: Load secrets
-        id: op-load-secret
+      - name: Load secret
         uses: 1password/load-secrets-action@v1
+        with:
+          # Export loaded secrets as environment variables
+          export-env: true
         env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          SECRET: op://Test/Test/password
-
+          SECRET: "op://Test/Test/password"
+      
       - name: Print masked secret
-        run: echo "Secret: ${{ steps.op-load-secret.outputs.SECRET }}"
-        # Prints: Secret: ***
-
+        run: |
+          echo "Secret: {{ env.SECRET }}"
+        
 #       - name: Install 1Password CLI
 #         run: |
 #           curl -o "op.zip" "https://cache.agilebits.com/dist/1P/op2/pkg/v2.18.0-beta.01/op_linux_amd64_v2.18.0-beta.01.zip"

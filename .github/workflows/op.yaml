@@ -25,7 +25,7 @@ jobs:
       
       - name: Print masked secret
         run: |
-          echo "Secret: {{ env.SECRET }}"
+          echo "Secret: $SECRET"
         
 #       - name: Install 1Password CLI
 #         run: |

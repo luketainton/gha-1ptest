@@ -10,15 +10,26 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       
-      - name: Configure 1Password Service Account
-        uses: 1password/load-secrets-action/configure@v1
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+#       - name: Configure 1Password Service Account
+#         uses: 1password/load-secrets-action/configure@v1
+#         with:
+#           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
-      - name: Load secret
+#       - name: Load secret
+#         uses: 1password/load-secrets-action@v1
+#         env:
+#           SECRET: "op://Test/Test/password"
+      
+      - name: Load secrets
+        id: op-load-secret
         uses: 1password/load-secrets-action@v1
         env:
-          SECRET: "op://Test/Test/password"
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          SECRET: op://Test/Test/password
+
+      - name: Print masked secret
+        run: echo "Secret: ${{ steps.op-load-secret.outputs.SECRET }}"
+        # Prints: Secret: ***
 
 #       - name: Install 1Password CLI
 #         run: |

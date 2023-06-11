@@ -9,22 +9,36 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Install 1Password CLI
-        run: |
-          curl -o "op.zip" "https://cache.agilebits.com/dist/1P/op2/pkg/v2.18.0-beta.01/op_linux_amd64_v2.18.0-beta.01.zip"
-          unzip op.zip
-          chmod +x op
-      - name: Test authentication
+      
+      - name: Configure 1Password Service Account
+        uses: 1password/load-secrets-action/configure@v1
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load secret
+        uses: 1password/load-secrets-action@v1
         env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-        run: ./op user get --me
-      - name: Get vault items
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-        run: ./op item list
-      - name: Get test password
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-        run: echo "TEST_PASSWORD=$(./op item get 'Test' --vault 'Test' --fields label=password)" >> $GITHUB_ENV
-      - name: Echo test password
-        run: echo $TEST_PASSWORD
+          SECRET: "op://Test/Test/password"
+
+#       - name: Install 1Password CLI
+#         run: |
+#           curl -o "op.zip" "https://cache.agilebits.com/dist/1P/op2/pkg/v2.18.0-beta.01/op_linux_amd64_v2.18.0-beta.01.zip"
+#           unzip op.zip
+#           chmod +x op
+          
+#       - name: Test authentication
+#         env:
+#           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+#         run: ./op user get --me
+        
+#       - name: Get vault items
+#         env:
+#           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+#         run: ./op item list
+        
+#       - name: Get test password
+#         env:
+#           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+#         run: echo "TEST_PASSWORD=$(./op item get 'Test' --vault 'Test' --fields label=password)" >> $GITHUB_ENV
+#       - name: Echo test password
+#         run: echo $TEST_PASSWORD
